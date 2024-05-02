@@ -15,8 +15,10 @@ warnings.filterwarnings("ignore")
 
 logging.basicConfig(level=logging.INFO)
 
-# bot = telebot.TeleBot('7004638154:AAHSXlAn6hhu999TmK9Nkzc4AIoVJHXW9GA') # prom stand
-bot = telebot.TeleBot('7139634075:AAG_TtOalJPAUqSnfXLEQknNe0QkiPQpTfQ') # ift stand
+
+
+# bot = telebot.TeleBot('===PROM BOT TOKEN===') # prom stand
+bot = telebot.TeleBot('===IFT BOT TOKEN===') # ift stand
 
 preproc = preprocessing.Preprocessing
 # sentim = sentiment.Sentiment() # prom stand
