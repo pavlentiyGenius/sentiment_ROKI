@@ -1,5 +1,4 @@
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer, util
 import numpy as np
 
 class Sentiment:
@@ -11,17 +10,16 @@ class Sentiment:
         
     def get_sentiment(self, sentences):
         embeddings = self.model.encode(sentences)
-        sim_values = cosine_similarity(embeddings, self.embeddings_classes)
-        simularity_result = sim_values.argmax(axis=1)
         
-        mapping = {
-            0:'негативная', 
-            1:'нейтральная', 
-            2:'позитивная'}
-            
-        sentiment_result = [mapping.get(i) for i in simularity_result]
-        sureness = list(sim_values.max(axis=1))
-        return sentiment_result, sureness
+        # Compute cosine-similarities
+        cosine_scores = np.array(util.cos_sim(embeddings, self.embeddings_classes))
+
+        a = lambda t: {0:'негативная', 1:'нейтральная', 2:'позитивная'}[t]
+        argmax = cosine_scores.argmax(axis=1)
+        simularity_result = list(map(a, argmax))
+        
+        sureness = list(cosine_scores.max(axis=1))
+        return simularity_result, sureness
         
 class Sentiment_TEST:
     def __init__(self):
