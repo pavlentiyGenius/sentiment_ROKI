@@ -6,6 +6,7 @@ from utils import preprocessing
 
 import io
 import telebot
+import json
 from telebot import types
 
 import warnings
@@ -15,14 +16,17 @@ warnings.filterwarnings("ignore")
 
 logging.basicConfig(level=logging.INFO)
 
+with open('secrets.json', 'r') as json_file:
+    secrets = json.load(json_file)
 
+stand = secrets['ift']
+token = stand['token']
 
-# bot = telebot.TeleBot('===PROM BOT TOKEN===') # prom stand
-bot = telebot.TeleBot('===IFT BOT TOKEN===') # ift stand
+bot = telebot.TeleBot(token) # ift stand
 
 preproc = preprocessing.Preprocessing
-# sentim = sentiment.Sentiment() # prom stand
-sentim = sentiment.Sentiment_TEST() # ift stand
+sentim = sentiment.Sentiment() # load with model
+#sentim = sentiment.Sentiment_TEST() # test model without model 
 
 @bot.message_handler(commands=['start', 'button'])
 def welcome(message):
