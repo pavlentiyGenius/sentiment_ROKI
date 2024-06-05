@@ -46,8 +46,8 @@ stopwords = stopwords_ru + stopwords_eng
 logging.info('Stopwords loaded')
 
 path = 'relevance_model'
-model_name = 'clf_relevance_05_06.pickle'
-vec_name = 'vec_relevance_05_06.pickle'
+model_name = 'clf_relevance_30_05.pickle'
+vec_name = 'vec_relevance_30_05.pickle'
 
 rel = relevance.Relevance(path, model_name, vec_name)
 logging.info('Relevance model loaded')
