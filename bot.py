@@ -14,10 +14,10 @@ import numpy as np
 import torch
 
 from utils import preprocessing
-# from utils import sentiment
+from utils import sentiment
 from utils import aspect_extractor
 from utils import relevance
-from utils.sentiment_ff import BertClassifier, SenitmentTorch
+#from utils.sentiment_ff import BertClassifier, SenitmentTorch
 
 from pymorphy3 import MorphAnalyzer
 
@@ -68,11 +68,12 @@ logging.info('Relevance model loaded')
 cleaning = preprocessing.Preprocessing(stopwords)
 logging.info('Preprocessing util loaded')
 
-model = BertClassifier().to(device)
-model.load_state_dict(torch.load('sentiment_model/LaBSE_head_v2.pth', map_location=torch.device(device)))
-model.eval()
+#model = BertClassifier().to(device)
+#model.load_state_dict(torch.load('sentiment_model/LaBSE_head_v2.pth', map_location=torch.device(device)))
+#model.eval()
+#sentiment = SenitmentTorch(model, device)
 
-sentiment = SenitmentTorch(model, device)
+sentiment_inference = sentiment.Sentiment() # load with model
 logging.info('Sentiment model loaded')
 
 aspects_extract = aspect_extractor.Aspects()
@@ -103,29 +104,29 @@ def get_aspect_sentiment_sentences(text):
     # test_frame_loader = sentiment.prepare_dataloader(test_frame)
     
     # Если в тексте есть данное ключевое слово, то точно нейтральный сентимент
-    if 'Текст на изображении:' in text:
-        results.append(['none', 'none', 'нейтральная'])
-        results = rasparse(results)
-        return results
+    # if 'Текст на изображении:' in text:
+    #     results.append(['none', 'none', 'нейтральная'])
+    #     results = rasparse(results)
+    #     return results
     
     text = cleaning.soft_preprocessing(text)
     med_tokens = aspects_extract.get_med_tokens_from_sent(text) # получаем препараты и контекст
     
     # если ничего из препаратов не найдено, то возвращаем сентимент всего текста
     if len(med_tokens) == 0:
-        # aspect_sentiment = sentiment.get_sentiment([text])
-        aspect_sentiment = sentiment.prediction(text)
+        aspect_sentiment = sentiment_inference.get_sentiment([text])
+        # aspect_sentiment = sentiment.prediction(text)
         results.append(['none', 'none', aspect_sentiment[0][0]])
     
     # если много препаратов скорее всего мусор
-    elif len(med_tokens) >=4:
+    elif len(med_tokens) >= 4:
         results.append(['none', 'none', 'нейтральная'])
         
     # если найдено, то возвращаем сентимент каждой части
     elif len(med_tokens) >= 1:
         for part in med_tokens:
-            # aspect_sentiment = sentiment.get_sentiment([part[3]])
-            aspect_sentiment = sentiment.prediction(part[3])
+            aspect_sentiment = sentiment_inference.get_sentiment([part[3]])
+            # aspect_sentiment = sentiment.prediction(part[3])
             results.append([part[0], part[3], aspect_sentiment[0][0]])
 
     results = rasparse(results)
