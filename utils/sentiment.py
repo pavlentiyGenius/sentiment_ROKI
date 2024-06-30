@@ -5,11 +5,11 @@ class Sentiment:
     def __init__(self):
         # self.model = SentenceTransformer('tuned_model_v3').eval()
         self.model = SentenceTransformer('pavlentiy/reviews-sentiment-multilingual-e5-base').eval()
-        self.embeddings_classes = self.model.encode(['негатив', 'нейтрально', 'позитив'])
+        self.embeddings_classes = self.model.encode(['негатив', 'нейтрально', 'позитив'], show_progress_bar=False)
         
         
     def get_sentiment(self, sentences):
-        embeddings = self.model.encode(sentences)
+        embeddings = self.model.encode(sentences, show_progress_bar=False)
         
         # Compute cosine-similarities
         cosine_scores = np.array(util.cos_sim(embeddings, self.embeddings_classes))

@@ -157,7 +157,7 @@ def handle_docs_photo(message):
         redused = redused.drop_duplicates(subset='Текст сообщения')
         
 #        redused['Текст сообщения_soft_cleaned'] = redused['Текст сообщения'].apply(lambda x: cleaning.soft_preprocessing(x))
-        redused['Текст сообщения_hard_cleaned'] = redused['Текст сообщения'].apply(lambda x: cleaning.hard_preprocessing(x))
+        redused['Текст сообщения_hard_cleaned'] = redused['Текст сообщения'].progress_apply(lambda x: cleaning.hard_preprocessing(x))
         logging.info('Texts are processed')
         
         
