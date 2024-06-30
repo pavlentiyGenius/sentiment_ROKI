@@ -1,3 +1,4 @@
 .ipynb_checkpoints/
 secrets.json
 test.ipynb
+sentiment_model/LaBSE_head_v2.pth
